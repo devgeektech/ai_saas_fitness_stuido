@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     
     "authentication",
     "superadmin",
+    "studio",
 ]
 
 MIDDLEWARE = [

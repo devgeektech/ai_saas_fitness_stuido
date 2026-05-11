@@ -7,9 +7,8 @@ urlpatterns = [
     path("dj-admin/", admin.site.urls),
     path("", include("authentication.web.urls")),
     path("admin/", include("superadmin.urls")),
+    path("studio/", include("studio.urls")),
 ]
-
-
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

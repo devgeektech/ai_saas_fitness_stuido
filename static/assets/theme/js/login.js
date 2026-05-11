@@ -24,13 +24,18 @@ $(document).ready(function(){
                 data:{"csrfmiddlewaretoken":$('input[name="csrfmiddlewaretoken"]').val(),email,password},
                 success: function(data) {
                     $("#sign_in_button").text('Log In');
-                    if(data.success){
+                    if(data.success && data.user_role == "studio_admin"){
+                        toastr.success(data.message);
+                        window.location.href = studio_admin_dashboard;
+                    }
+                    else if(data.success){
                         toastr.success(data.message);
                         window.location.href = admin_dashboard;
-                    }else{
+                    }
+                    else{
                         toastr.error(data.error);
                     }
-                }  
+                }
             });
         }
     });

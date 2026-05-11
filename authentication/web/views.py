@@ -31,9 +31,7 @@ from utils.constants import (
 )
 import os
 
-
-
-# Create your views here.
+# login for superadmin , studio admin
 def auth_login(request):
     try:        
         if request.method == "POST":
@@ -51,6 +49,16 @@ def auth_login(request):
                     login(request, user)
                     messages.success(request, LOGIN_SUCCESS)
                     return JsonResponse({SUCCESS: TRUE, MESSAGE: LOGIN_SUCCESS})
+                else:
+                    return JsonResponse(
+                        {SUCCESS: FALSE, ERROR: INVALID_LOGIN_DETAILS}
+                    )
+            if user.is_active and user.role=="studio_admin":
+                user = authenticate(email=email, password=password)
+                if user is not None:
+                    login(request, user)
+                    messages.success(request, LOGIN_SUCCESS)
+                    return JsonResponse({SUCCESS: TRUE, "user_role":user.role, MESSAGE: LOGIN_SUCCESS})
                 else:
                     return JsonResponse(
                         {SUCCESS: FALSE, ERROR: INVALID_LOGIN_DETAILS}
@@ -92,11 +100,8 @@ def auth_register(request):
             user.is_active = True
             user.email_verified = True
             user.save()
-
             messages.success(request, REGISTER_SUCCESS)
-
             return redirect('admin-login')
-
         else:
             return render(request, "register.html")
 

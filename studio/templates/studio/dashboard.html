@@ -1,0 +1,83 @@
+{% extends "master.html" %}
+{% load static %}
+{% comment %} {% load custom_tags %} {% endcomment %}
+{% block content %}
+    <!-- Start Content-->
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Projects</h4>
+            </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-12">
+            <div class="card widget-inline">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                <div class="card-body text-center">
+                                    <i class="ri-group-line text-muted font-24"></i>
+                                    <h3> {{users}} <span>Users</span></h3>
+                                    <a href="#"><p class="text-muted font-15 mb-0">Users</p></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+
+                
+            </div>
+            <!-- end card-box-->
+            </div>
+            <!-- end col-->
+        </div>
+        <!-- end row-->
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="header-title">Daily Users Registration</h4> 
+                    </div> 
+                    <div class="card-body pt-2">     
+                        <div class="card chart">
+                            <div class="chart">
+                               <canvas id="users_chart"></canvas>
+                            </div>
+                         </div>
+                    </div>
+                    <!-- end card body-->
+                </div>
+            </div>
+             <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                          <h4 class="header-title">Revenue</h4> 
+                    </div> 
+                    <div class="card-body pt-2">     
+                        <div class="card chart">
+                            <div class="chart">
+                               <canvas id="revenue_chart"></canvas>
+                            </div>
+                         </div>
+                    </div>
+                    <!-- end card body-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- container -->
+{% endblock content %}
+{% block js %}
+{% endblock js %}
