@@ -19,10 +19,13 @@ from utils.constants import (
     LOGIN_ACCOUNT,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
+    PASSWORD_NOT_MATCHED,
     PROFILE_UPDATED_SUCCESS,
+    REGISTER_SUCCESS,
     SUCCESS,
     TRUE,
     MESSAGE,
+    USER_ALREADY_EXISTS,
     USER_NOT_ACTIVE,
     USER_NOT_FOUND, 
 )
@@ -42,7 +45,7 @@ def auth_login(request):
             except User.DoesNotExist:
                 return JsonResponse({SUCCESS: FALSE, ERROR: USER_NOT_FOUND})
             
-            if user.is_superuser and user.role == "superadmin":
+            if user.is_superuser and user.is_active:
                 user = authenticate(email=email, password=password)
                 if user is not None:
                     login(request, user)
@@ -58,7 +61,52 @@ def auth_login(request):
     except Exception as ex:
         return JsonResponse({SUCCESS: FALSE, ERROR: f"Error: {str(ex)}"})
     
-    
+# register studio user
+def auth_register(request):
+    try:
+
+        if request.method == "POST":
+
+            email = request.POST.get("email").strip()
+            password = request.POST.get("password").strip()
+            confirm_password = request.POST.get("confirm_password").strip()
+
+            # Check Password Match
+            if password != confirm_password:
+                messages.error(request, PASSWORD_NOT_MATCHED)
+                return redirect('admin-register')
+
+            # Check Existing User
+            if User.objects.filter(Q(email=email)).exists():
+                messages.error(request, USER_ALREADY_EXISTS)
+                return redirect('admin-register')
+
+            # Create User
+            user = User.objects.create_user(
+                email=email,
+                username=email.split("@")[0],
+                password=password,
+            )
+
+            user.role = "studio_admin"
+            user.is_active = True
+            user.email_verified = True
+            user.save()
+
+            messages.success(request, REGISTER_SUCCESS)
+
+            return redirect('admin-login')
+
+        else:
+            return render(request, "register.html")
+
+    except Exception as ex:
+        return render(request, '500.html', {
+            ERROR: str(ex)
+        })
+        
+        
+        
 # Logout User
 @login_required(login_url="login")
 def auth_logout(request):

@@ -19,3 +19,6 @@ MESSAGE = "message"
 
 USER_NOT_ACTIVE = "User account is not active."
 USER_NOT_FOUND = "User not found."
+PASSWORD_NOT_MATCHED = "Password does not matched."
+USER_ALREADY_EXISTS = "User already exists."
+REGISTER_SUCCESS = "User registered successfully."
