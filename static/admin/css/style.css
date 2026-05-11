@@ -1,0 +1,54 @@
+:root {
+    --ct-primary-rgb: 10, 1, 46, 1;
+    --ct-primary: #000000;
+    --ct-btn-bg:#000000 !important;
+    --ct-dark-rgb:10, 1, 46, 1;
+    --ct-link-hover-color:#000000 !important;
+    --ct-topbar-item-hover-color:#000000!important;
+
+    /* link color  */
+    --ct-link-color-rgb:10, 1, 46, 1;
+    --ct-link-hover-color-rgb: #000000;
+
+    --ct-menu-item-color:#C8A122 !important;
+
+
+}
+
+
+html[data-bs-theme=light]{
+    --ct-menu-bg:#000000 !important;
+}
+.btn-primary, .btn-info{
+    --ct-btn-bg:#000000 ;
+    --ct-btn-border-color:#000000;
+    --ct-btn-hover-bg:#000000;
+
+    --ct-btn-hover-border-color: #000000;
+    --ct-btn-active-bg:#000000;
+}
+
+.nav-pills{
+    --ct-nav-pills-link-active-bg: #000000!important;
+}
+
+.active>.page-link, .page-link.active{
+    --ct-pagination-active-bg:#000000 !important;
+    --ct-pagination-active-border-color:#000000 !important;
+}
+.paginate_button:hover, .paginate_button:active{
+    background: transparent !important;
+    border-color:transparent !important;
+    box-shadow:none !important;    
+}
+
+.form-check-input:checked{
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+
+.logo-lg img{
+    width:83px !important;
+    height:72px !important;
+}
