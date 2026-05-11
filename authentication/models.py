@@ -20,6 +20,7 @@ class User(AbstractUser):
     last_name  = models.CharField(max_length=50, null=True, blank=True)
     image      = models.ImageField(upload_to='users/', null=True, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='studio_admin', db_index=True)
+    created_by = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True,related_name='created_users')
     is_active      = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
  

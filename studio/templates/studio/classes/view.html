@@ -1,0 +1,76 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Classes</a></li>
+                        <li class="breadcrumb-item active">View Class</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Class Details</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAILS CARD -->
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="mb-3">{{ class_obj.title }}</h4>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th>Category</th>
+                            <td>{{ class_obj.category|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Difficulty</th>
+                            <td>{{ class_obj.difficulty|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Focus</th>
+                            <td>{{ class_obj.focus|default:"—" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Duration</th>
+                            <td>{{ class_obj.duration }} min</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <td>{{ class_obj.status }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Created At</th>
+                            <td>{{ class_obj.created_at }}</td>
+                        </tr>
+
+                    </table>
+
+                    <a href="{% url 'classes-edit' class_obj.uuid %}" class="btn btn-primary">
+                        Edit Class
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
