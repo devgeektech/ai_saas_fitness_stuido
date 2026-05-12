@@ -1,0 +1,151 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">
+                                Class Segments
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            View Class Segment
+                        </li>
+
+                    </ol>
+                </div>
+
+                <h4 class="page-title">
+                    View Class Segment
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILS -->
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Class
+                            </label>
+
+                            <p>
+                                {{ segment_obj.class_obj }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Exercise
+                            </label>
+
+                            <p>
+                                {{ segment_obj.exercise }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Segment Type
+                            </label>
+
+                            <p>
+                                {{ segment_obj.get_segment_type_display }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Title
+                            </label>
+
+                            <p>
+                                {{ segment_obj.title }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Order
+                            </label>
+
+                            <p>
+                                {{ segment_obj.order }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Duration
+                            </label>
+
+                            <p>
+                                {{ segment_obj.duration }} sec
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Script
+                            </label>
+
+                            <p>
+                                {{ segment_obj.script }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

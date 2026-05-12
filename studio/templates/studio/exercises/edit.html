@@ -1,0 +1,89 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css" rel="stylesheet">
+
+<style>
+    .dynamic-content {
+        position: relative;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">Exercises</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            Edit Exercise
+                        </li>
+                    </ol>
+                </div>
+
+                <h4 class="page-title">Edit Exercise</h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <form action="#" method="POST" enctype="multipart/form-data" id="edit-exercise-form">
+
+                        {% csrf_token %}
+
+                        {% for field in form %}
+
+                            <div class="fieldWrapper mb-3">
+
+                                <label class="form-label">
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                                <div class="text-danger">
+                                    {{ field.errors }}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary mt-2">
+                            <i class="mdi mdi-content-save me-1"></i>
+                            Update Exercise
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+{% endblock js %}

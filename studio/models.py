@@ -24,6 +24,7 @@ class Exercise(models.Model):
         ('beginner',     'Beginner'),
         ('intermediate', 'Intermediate'),
         ('advanced',     'Advanced'),
+        
     )
 
     STATUS_CHOICES = (
@@ -78,3 +79,72 @@ class Class(models.Model):
 
     class Meta:
         db_table = 'studio_classes'
+        
+
+# class segments    
+class ClassSegment(models.Model):
+
+    SEGMENT_CHOICES = (
+        ('warmup',   'Warmup'),
+        ('exercise', 'Exercise'),
+        ('rest',     'Rest'),
+        ('cooldown', 'Cooldown'),
+    )
+
+    uuid         = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    class_obj    = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='segments')
+    exercise     = models.ForeignKey(Exercise, on_delete=models.SET_NULL, null=True, blank=True)
+    segment_type = models.CharField(max_length=20, choices=SEGMENT_CHOICES, null=True, blank=True)
+    title        = models.CharField(max_length=200, null=True, blank=True)
+    script       = models.TextField(null=True, blank=True)
+    order        = models.PositiveIntegerField(null=True, blank=True)
+    duration     = models.PositiveIntegerField(help_text="Duration in seconds", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        db_table = 'studio_class_segments'
+    
+    
+# audio segments 
+class AudioSegment(models.Model):
+
+    STATUS_CHOICES = (
+        ('pending',    'Pending'),
+        ('generating', 'Generating'),
+        ('completed',  'Completed'),
+        ('failed',     'Failed'),
+    )
+
+    uuid      = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    segment   = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='audio')
+    audio_url = models.URLField(null=True, blank=True)
+    duration  = models.FloatField(null=True, blank=True, help_text="Duration in seconds")
+    voice_id  = models.CharField(max_length=100, null=True, blank=True)
+    status    = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        db_table = 'studio_audio_segments'
+        
+# avatar videos
+class AvatarVideo(models.Model):
+
+    STATUS_CHOICES = (
+        ('pending',    'Pending'),
+        ('generating', 'Generating'),
+        ('completed',  'Completed'),
+        ('failed',     'Failed'),
+    )
+
+    uuid      = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    segment   = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='avatar_video')
+    video_url = models.URLField(null=True, blank=True)
+    avatar_id = models.CharField(max_length=100, null=True, blank=True)
+    status    = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        db_table = 'studio_avatar_videos'

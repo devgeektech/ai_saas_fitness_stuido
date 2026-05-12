@@ -1,0 +1,95 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="page-title-box">
+
+                <div class="page-title-right">
+
+                    <ol class="breadcrumb m-0">
+
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">Avatar Videos</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            View Avatar Video
+                        </li>
+
+                    </ol>
+
+                </div>
+
+                <h4 class="page-title">View Avatar Video</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Segment</label>
+                        <p>{{ avatar_video.segment }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Avatar ID</label>
+                        <p>{{ avatar_video.avatar_id }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Video URL</label>
+
+                        {% if avatar_video.video_url %}
+                            <a href="{{ avatar_video.video_url }}" target="_blank">
+                                {{ avatar_video.video_url }}
+                            </a>
+                        {% else %}
+                            <p>—</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <p>{{ avatar_video.status }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Created At</label>
+                        <p>{{ avatar_video.created_at }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Updated At</label>
+                        <p>{{ avatar_video.updated_at }}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
