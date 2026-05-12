@@ -69,7 +69,7 @@ def create(request):
                 obj.save()
 
                 messages.success(request, "Class created successfully")
-                return redirect("classes-list")
+                return redirect("classes-index")
 
             else:
                 messages.error(request, "Invalid form data")
@@ -102,7 +102,7 @@ def edit(request, uuid):
 
         if not class_obj:
             messages.error(request, "Class not found.")
-            return redirect("classes-list")
+            return redirect("classes-index")
 
         # ---------------- POST ----------------
         if request.method == "POST":
@@ -114,7 +114,7 @@ def edit(request, uuid):
                 obj.save()
 
                 messages.success(request, "Class updated successfully")
-                return redirect("classes-list")
+                return redirect("classes-index")
 
             messages.error(request, "Invalid form data")
             return render(request, "studio/classes/edit.html", {
@@ -149,7 +149,7 @@ def view(request, uuid):
 
         if not class_obj:
             messages.error(request, "Class not found.")
-            return redirect("classes-list")
+            return redirect("classes-index")
 
         return render(request, "studio/classes/view.html", {
             "class_obj": class_obj
