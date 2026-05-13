@@ -91,7 +91,7 @@ $(document).ready(function () {
 
                     if (type === "display") {
                         return `
-                            <a href="/studio/classes/view   /${uuid}" class="action-icon viewbtn">
+                            <a href="/studio/classes/view/${uuid}" class="action-icon viewbtn">
                                 <i class="mdi mdi-eye"></i>
                             </a>
 

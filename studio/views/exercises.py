@@ -52,38 +52,25 @@ class ExercisesListView(ServerSideDatatableView):
 def create(request):
 
     try:
-
         if request.method == "POST":
-
             form = ExerciseForm(
                 request.POST,
                 request.FILES
             )
-
             if form.is_valid():
-
                 form.save()
-
                 messages.success(request, "Exercise created successfully")
-
                 return redirect("exercises-index")
-
             messages.error(request, "Invalid form data")
-
             return render(request, "studio/exercises/create.html", {
                 "form": form
             })
-
         form = ExerciseForm()
-
         return render(request, "studio/exercises/create.html", {
             "form": form
         })
-
     except Exception as ex:
-
         messages.error(request, str(ex))
-
         return render(request, "500.html", {
             "error": str(ex),
             "return_url": "/studio/exercises/create"
@@ -95,51 +82,36 @@ def create(request):
 def edit(request, uuid):
 
     try:
-
         exercise_obj = Exercise.objects.filter(
             uuid=uuid
         ).first()
-
         if not exercise_obj:
-
             messages.error(request, "Exercise not found")
-
             return redirect("exercises-index")
 
         if request.method == "POST":
-
             form = ExerciseForm(
                 request.POST,
                 request.FILES,
                 instance=exercise_obj
             )
-
             if form.is_valid():
-
                 form.save()
-
                 messages.success(request, "Exercise updated successfully")
-
                 return redirect("exercises-index")
-
             messages.error(request, "Invalid form data")
-
             return render(request, "studio/exercises/edit.html", {
                 "form": form,
                 "exercise_obj": exercise_obj
             })
 
         form = ExerciseForm(instance=exercise_obj)
-
         return render(request, "studio/exercises/edit.html", {
             "form": form,
             "exercise_obj": exercise_obj
         })
-
     except Exception as ex:
-
         messages.error(request, str(ex))
-
         return render(request, "500.html", {
             "error": str(ex),
             "return_url": "/studio/exercises"
@@ -151,25 +123,17 @@ def edit(request, uuid):
 def view(request, uuid):
 
     try:
-
         exercise_obj = Exercise.objects.filter(
             uuid=uuid
         ).first()
-
         if not exercise_obj:
-
             messages.error(request, "Exercise not found")
-
             return redirect("exercises-index")
-
         return render(request, "studio/exercises/view.html", {
             "exercise_obj": exercise_obj
         })
-
     except Exception as ex:
-
         messages.error(request, str(ex))
-
         return render(request, "500.html", {
             "error": str(ex),
             "return_url": "/studio/exercises"
