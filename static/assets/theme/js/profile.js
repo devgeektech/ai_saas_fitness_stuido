@@ -5,7 +5,7 @@ $(document).ready(function(){
             rules: {
                 password: {required: true,minlength: 6},
                 confirm_password: {
-                    minlength: 8,
+                    minlength: 6,
                     required: true,
                     equalTo: "#password"
                 }
