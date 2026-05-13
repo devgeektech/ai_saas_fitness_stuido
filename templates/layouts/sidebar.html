@@ -74,10 +74,20 @@
                <div class="dropdown-header noti-title">
                   <h6 class="text-overflow m-0">Welcome !</h6>
                </div>
-               <a href="{% url 'profile' %}" class="dropdown-item">
-                  <i class="mdi mdi-account-circle me-1"></i>
-                  <span>My Profile</span>
-               </a>
+               {% if user.is_superuser %}
+                  <a href="{% url 'profile' %}" class="dropdown-item">
+                     <i class="mdi mdi-account-circle me-1"></i>
+                     <span>My Profile</span>
+                  </a>
+
+               {% elif user.is_active and user.role == 'studio_admin' %}
+
+                  <a href="{% url 'studio-admin-profile' %}" class="dropdown-item">
+                     <i class="mdi mdi-account-circle me-1"></i>
+                     <span>My Profile</span>
+                  </a>
+
+               {% endif %}
                <a href="{% url 'admin-logout' %}" class="dropdown-item">
                   <i class="mdi mdi-logout me-1"></i>
                   <span>Logout</span>
@@ -134,16 +144,56 @@
       <ul class="side-nav">
          <li class="side-nav-title">Navigation</li>
          {% if user.is_superuser %}
-         <li class="side-nav-item {% if request.path == '/user/dashboard' %}menuitem-active{% endif %}">
-            <a href="{% url 'admin-dashboard' %}" class="side-nav-link">
-               <i class="uil-home-alt"></i>
-               <span> Dashboard </span>
-            </a>
-         </li>
+            <li class="side-nav-item {% if request.path == '/user/dashboard' %}menuitem-active{% endif %}">
+               <a href="{% url 'admin-dashboard' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Dashboard </span>
+               </a>
+            </li>
          
-
+         {% elif user.is_active and user.role == 'studio_admin' %}
        
+            <li class="side-nav-item {% if request.path == '/studio/admin/dashboard' %}menuitem-active{% endif %}">
+               <a href="{% url 'studio-admin-dashboard' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Dashboard </span>
+               </a>
+            </li>
 
+            <li class="side-nav-item {% if request.path == '/studio/classes' %}menuitem-active{% endif %}">
+               <a href="{% url 'classes-index' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Classes </span>
+               </a>
+            </li>
+
+            <li class="side-nav-item {% if request.path == '/studio/exercises' %}menuitem-active{% endif %}">
+               <a href="{% url 'exercises-index' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Exercises </span>
+               </a>
+            </li>
+
+            <li class="side-nav-item {% if request.path == '/studio/class-segments' %}menuitem-active{% endif %}">
+               <a href="{% url 'class-segments-index' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Class Segments </span>
+               </a>
+            </li>
+
+            <li class="side-nav-item {% if request.path == '/studio/audio-segments' %}menuitem-active{% endif %}">
+               <a href="{% url 'audio-segments-index' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Audio Segments </span>
+               </a>
+            </li>
+
+            <li class="side-nav-item {% if request.path == '/studio/avatar-videos' %}menuitem-active{% endif %}">
+               <a href="{% url 'avatar-videos-index' %}" class="side-nav-link">
+                  <i class="uil-home-alt"></i>
+                  <span> Avatar Videos Segments </span>
+               </a>
+            </li>
       
          {% else %}
         

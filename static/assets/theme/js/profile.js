@@ -10,9 +10,35 @@ $(document).ready(function(){
                     equalTo: "#password"
                 }
             },
-            messages: {
-                confirm_password: "Confirm password must be match with new password.",
+            confirm_password: {
+                required: true,
+                minlength: 6,
+                equalTo: "#password"
             }
-        });
+        },
+        messages: {
+            confirm_password: "Confirm password must match new password."
+        }
     });
+
+    // ✅ PROFILE FORM VALIDATION
+    $("#update-profile-form").validate({
+        rules: {
+            name: {
+                required: true
+            },
+            brand_color: {
+                required: true
+            }
+        },
+        messages: {
+            name: {
+                required: "Please enter studio name"
+            },
+            brand_color: {
+                required: "Please select brand color"
+            }
+        }
+    });
+
 });

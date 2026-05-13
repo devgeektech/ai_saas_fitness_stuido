@@ -1,0 +1,130 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="page-title-box">
+
+                <div class="page-title-right">
+
+                    <ol class="breadcrumb m-0">
+
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">Audio Segments</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            View Audio Segment
+                        </li>
+
+                    </ol>
+
+                </div>
+
+                <h4 class="page-title">
+                    View Audio Segment
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Segment
+                            </label>
+
+                            <p>
+                                {{ audio_obj.segment }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Voice ID
+                            </label>
+
+                            <p>
+                                {{ audio_obj.voice_id }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Duration
+                            </label>
+
+                            <p>
+                                {{ audio_obj.duration }} sec
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Status
+                            </label>
+
+                            <p>
+                                {{ audio_obj.get_status_display }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+                                Audio URL
+                            </label>
+
+                            <p>
+                                <a href="{{ audio_obj.audio_url }}" target="_blank">
+                                    {{ audio_obj.audio_url }}
+                                </a>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
