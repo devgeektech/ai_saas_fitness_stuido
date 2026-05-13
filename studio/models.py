@@ -5,7 +5,6 @@ import uuid
 # Create your models here.
 class Studio(models.Model):
     uuid        = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name        = models.CharField(max_length=200, null=True, blank=True)
     slug        = models.SlugField(unique=True, null=True, blank=True)
     logo        = models.ImageField(upload_to='studios/', null=True, blank=True)
@@ -33,6 +32,8 @@ class Exercise(models.Model):
     )
 
     uuid         = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user         = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="exercise_user", blank=True)
+    studio       = models.ForeignKey(Studio, on_delete=models.CASCADE, null=True, related_name='exercise_studio', blank=True)
     name         = models.CharField(max_length=200, null=True, blank=True)
     category     = models.CharField(max_length=100, null=True, blank=True)
     difficulty   = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES, null=True, blank=True)
@@ -43,7 +44,7 @@ class Exercise(models.Model):
     thumbnail    = models.ImageField(upload_to='exercises/thumbnails/', null=True, blank=True)
     status       = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     created_at   = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at   = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'studio_exercises'
@@ -92,6 +93,8 @@ class ClassSegment(models.Model):
     )
 
     uuid         = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user         = models.ForeignKey(User, on_delete=models.CASCADE, related_name="segment_user", null=True, blank=True)
+    studio       = models.ForeignKey(Studio, on_delete=models.CASCADE, related_name='segment_studio', null=True, blank=True)
     class_obj    = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='segments')
     exercise     = models.ForeignKey(Exercise, on_delete=models.SET_NULL, null=True, blank=True)
     segment_type = models.CharField(max_length=20, choices=SEGMENT_CHOICES, null=True, blank=True)
@@ -99,8 +102,8 @@ class ClassSegment(models.Model):
     script       = models.TextField(null=True, blank=True)
     order        = models.PositiveIntegerField(null=True, blank=True)
     duration     = models.PositiveIntegerField(help_text="Duration in seconds", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    created_at   = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at   = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         db_table = 'studio_class_segments'
@@ -116,12 +119,14 @@ class AudioSegment(models.Model):
         ('failed',     'Failed'),
     )
 
-    uuid      = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    segment   = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='audio')
-    audio_url = models.URLField(null=True, blank=True)
-    duration  = models.FloatField(null=True, blank=True, help_text="Duration in seconds")
-    voice_id  = models.CharField(max_length=100, null=True, blank=True)
-    status    = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    uuid       = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name="audio_user", null=True, blank=True)
+    studio     = models.ForeignKey(Studio, on_delete=models.CASCADE, related_name='audio_studio', null=True, blank=True)
+    segment    = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='audio')
+    audio_url  = models.URLField(null=True, blank=True)
+    duration   = models.FloatField(null=True, blank=True, help_text="Duration in seconds")
+    voice_id   = models.CharField(max_length=100, null=True, blank=True)
+    status     = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -138,11 +143,13 @@ class AvatarVideo(models.Model):
         ('failed',     'Failed'),
     )
 
-    uuid      = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    segment   = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='avatar_video')
-    video_url = models.URLField(null=True, blank=True)
-    avatar_id = models.CharField(max_length=100, null=True, blank=True)
-    status    = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    uuid       = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name="avatar_user", null=True, blank=True)
+    studio     = models.ForeignKey(Studio, on_delete=models.CASCADE, related_name='avatar_studio', null=True, blank=True)
+    segment    = models.OneToOneField(ClassSegment, on_delete=models.CASCADE, related_name='avatar_video')
+    video_url  = models.URLField(null=True, blank=True)
+    avatar_id  = models.CharField(max_length=100, null=True, blank=True)
+    status     = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 

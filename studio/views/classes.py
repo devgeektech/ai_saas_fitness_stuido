@@ -5,7 +5,7 @@ from authentication.models import User
 from django.contrib import messages
 from studio.forms.forms import ClassForm
 from studio.models import Class, Studio
-from utils.constants import (ERROR, FALSE)
+from utils.constants import (CLASS_CREATED_SUCCESSFULLY, CLASS_DELETED_SUCCESSFULLY, CLASS_NOT_FOUND, CLASS_UPDATED_SUCCESSFULLY, ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SOMETHING_WENT_WRONG, STUDIO_NOT_FOUND_FOR_USER, SUCCESS, TRUE)
 from django_serverside_datatable.views import ServerSideDatatableView
 import logging
 from superadmin.views.views import superuser_required
@@ -22,7 +22,7 @@ def index(request):
         return render(request, "studio/classes/index.html", context)
     except Exception as ex:
         messages.error(request, ex)        
-        context = {ERROR:str(ex),"return_url":"/studio/classes"}
+        context = {ERROR:str(ex),RETURN_URL:"/studio/classes"}
         return render(request,"500.html",context)
     
 
@@ -49,14 +49,6 @@ class ClassesListView(ServerSideDatatableView):
 @login_required(login_url="admin-login")
 def create(request):
     try:
-
-        studio = Studio.objects.filter(user=request.user).first()
-
-        if not studio:
-            messages.error(request, "Studio not found for this user.")
-            return redirect("studio-admin-profile")
-
-        # ---------------- POST ----------------
         if request.method == "POST":
             form = ClassForm(request.POST)
 
@@ -64,30 +56,29 @@ def create(request):
                 obj = form.save(commit=False)
 
                 obj.created_by = request.user
-                obj.studio = studio
+                obj.studio = request.user.studio
 
                 obj.save()
 
-                messages.success(request, "Class created successfully")
+                messages.success(request, CLASS_CREATED_SUCCESSFULLY)
                 return redirect("classes-index")
 
             else:
-                messages.error(request, "Invalid form data")
+                messages.error(request, INVALID_FORM_DATA)
                 return render(request, "studio/classes/create.html", {
-                    "form": form
+                    FORM: form
                 })
-
-        # ---------------- GET ----------------
+                
         form = ClassForm()
         return render(request, "studio/classes/create.html", {
-            "form": form
+            FORM: form
         })
 
     except Exception as ex:
         messages.error(request, f"Error: {str(ex)}")
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/classes/create"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/classes/create"
         })
         
 # Edit class
@@ -95,16 +86,12 @@ def create(request):
 def edit(request, uuid):
     try:
 
-        class_obj = Class.objects.filter(
-            uuid=uuid,
-            created_by=request.user
-        ).first()
+        class_obj = Class.objects.filter(uuid=uuid, created_by=request.user).first()
 
         if not class_obj:
             messages.error(request, "Class not found.")
             return redirect("classes-index")
 
-        # ---------------- POST ----------------
         if request.method == "POST":
             form = ClassForm(request.POST, instance=class_obj)
 
@@ -113,28 +100,26 @@ def edit(request, uuid):
                 obj.created_by = request.user
                 obj.save()
 
-                messages.success(request, "Class updated successfully")
+                messages.success(request, CLASS_UPDATED_SUCCESSFULLY)
                 return redirect("classes-index")
 
-            messages.error(request, "Invalid form data")
+            messages.error(request, INVALID_FORM_DATA)
             return render(request, "studio/classes/edit.html", {
-                "form": form,
+                FORM: form,
                 "class_obj": class_obj
             })
 
-        # ---------------- GET ----------------
         form = ClassForm(instance=class_obj)
-
         return render(request, "studio/classes/edit.html", {
-            "form": form,
+            FORM: form,
             "class_obj": class_obj
         })
 
     except Exception as ex:
-        messages.error(request, "Something went wrong")
+        messages.error(request, SOMETHING_WENT_WRONG)
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/classes/list"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/classes/list"
         })
     
     
@@ -148,7 +133,7 @@ def view(request, uuid):
         ).first()
 
         if not class_obj:
-            messages.error(request, "Class not found.")
+            messages.error(request, CLASS_NOT_FOUND)
             return redirect("classes-index")
 
         return render(request, "studio/classes/view.html", {
@@ -156,10 +141,10 @@ def view(request, uuid):
         })
 
     except Exception as ex:
-        messages.error(request, "Something went wrong")
+        messages.error(request, SOMETHING_WENT_WRONG)
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/classes/list"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/classes/list"
         })
 
     
@@ -175,20 +160,20 @@ def delete(request, uuid):
             ).first()
             if not class_obj:
                 return JsonResponse({
-                    "success": False,
-                    "error": "Class not found"
+                    SUCCESS: FALSE,
+                    ERROR: CLASS_NOT_FOUND
                 })
             class_obj.delete()
             return JsonResponse({
-                "success": True,
-                "message": "Class deleted successfully"
+                SUCCESS: TRUE,
+                MESSAGE: CLASS_DELETED_SUCCESSFULLY
             })
         return JsonResponse({
-            "success": False,
-            "error": "Invalid request method"
+            SUCCESS: FALSE,
+            ERROR: INVALID_REQUEST_METHOD
         })
     except Exception as ex:
         return JsonResponse({
-            "success": False,
-            "error": str(ex)
+            SUCCESS: FALSE,
+            ERROR: str(ex)
         })

@@ -144,7 +144,7 @@
       <ul class="side-nav">
          <li class="side-nav-title">Navigation</li>
          {% if user.is_superuser %}
-            <li class="side-nav-item {% if request.path == '/user/dashboard' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/user/dashboard' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'admin-dashboard' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Dashboard </span>
@@ -153,42 +153,41 @@
          
          {% elif user.is_active and user.role == 'studio_admin' %}
        
-            <li class="side-nav-item {% if request.path == '/studio/admin/dashboard' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/admin/dashboard' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'studio-admin-dashboard' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Dashboard </span>
                </a>
             </li>
-
-            <li class="side-nav-item {% if request.path == '/studio/classes' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/classes' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'classes-index' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Classes </span>
                </a>
             </li>
 
-            <li class="side-nav-item {% if request.path == '/studio/exercises' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/exercises' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'exercises-index' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Exercises </span>
                </a>
             </li>
 
-            <li class="side-nav-item {% if request.path == '/studio/class-segments' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/class-segments' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'class-segments-index' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Class Segments </span>
                </a>
             </li>
 
-            <li class="side-nav-item {% if request.path == '/studio/audio-segments' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/audio-segments' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'audio-segments-index' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Audio Segments </span>
                </a>
             </li>
 
-            <li class="side-nav-item {% if request.path == '/studio/avatar-videos' %}menuitem-active{% endif %}">
+            <li class="side-nav-item {% if '/studio/avatar-videos' in request.path %}menuitem-active{% endif %}">
                <a href="{% url 'avatar-videos-index' %}" class="side-nav-link">
                   <i class="uil-home-alt"></i>
                   <span> Avatar Videos Segments </span>

@@ -110,14 +110,29 @@ def studio_admin_profile(request):
                 brand_color = request.POST.get("brand_color")
                 logo = request.FILES.get("logo")
 
-                studio, created = Studio.objects.update_or_create(
-                    user=request.user,
-                    defaults={
-                        "name": name,
-                        "slug": slug,
-                        "brand_color": brand_color,
-                    }
-                )
+                # If user already has studio -> update
+                if request.user.studio:
+
+                    studio = request.user.studio
+
+                    studio.name = name
+                    studio.slug = slug
+                    studio.brand_color = brand_color
+                    studio.save()
+
+                # Else create new studio
+                else:
+
+                    studio = Studio.objects.create(
+                        name=name,
+                        slug=slug,
+                        brand_color=brand_color,
+                    )
+
+                    # Save studio id in auth user table
+                    request.user.studio = studio
+                    request.user.save()
+                    
 
                 if logo:
                     old_logo = studio.logo
