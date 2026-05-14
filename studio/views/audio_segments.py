@@ -15,7 +15,6 @@ from utils.constants import (
     SOMETHING_WENT_WRONG,
     SUCCESS,
     TRUE,
-
     AUDIO_SEGMENT_CREATED_SUCCESS,
     AUDIO_SEGMENT_UPDATED_SUCCESS,
     AUDIO_SEGMENT_DELETED_SUCCESS,
@@ -69,10 +68,10 @@ def create(request):
                 obj.user = request.user
                 obj.save()
 
-                messages.success(request, "Audio segment created successfully")
+                messages.success(request, AUDIO_SEGMENT_CREATED_SUCCESS)
                 return redirect("audio-segments-index")
             else:
-                messages.error(request, "Invalid form data")
+                messages.error(request, INVALID_FORM_DATA)
                 return render(request,"studio/audio-segments/create.html",{FORM: form})
 
         form = AudioSegmentForm()
