@@ -15,6 +15,9 @@ class Studio(models.Model):
     class Meta:
         db_table = 'studios'
         
+    def __str__(self):
+        return f"{self.name}"
+        
         
 # exercises
 class Exercise(models.Model):
@@ -48,6 +51,9 @@ class Exercise(models.Model):
 
     class Meta:
         db_table = 'studio_exercises'
+        
+    def __str__(self):
+        return f"{self.name}"
     
         
 # classes
@@ -81,6 +87,8 @@ class Class(models.Model):
     class Meta:
         db_table = 'studio_classes'
         
+    def __str__(self):
+        return f"{self.title}"
 
 # class segments    
 class ClassSegment(models.Model):
@@ -107,6 +115,9 @@ class ClassSegment(models.Model):
 
     class Meta:
         db_table = 'studio_class_segments'
+        
+    def __str__(self):
+        return f"{self.title}"
     
     
 # audio segments 
