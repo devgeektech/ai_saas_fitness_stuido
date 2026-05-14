@@ -23,6 +23,7 @@ class User(AbstractUser):
     created_by = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True,related_name='created_users')
     is_active      = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
+    studio = models.ForeignKey("studio.Studio",on_delete=models.CASCADE,null=True,blank=True)
  
     USERNAME_FIELD  = 'email'
     REQUIRED_FIELDS = ['username']

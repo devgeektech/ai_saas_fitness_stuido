@@ -5,7 +5,7 @@ from django.contrib import messages
 from django_serverside_datatable.views import ServerSideDatatableView
 from studio.forms.forms import ExerciseForm
 from studio.models import Exercise
-from utils.constants import ERROR
+from utils.constants import ERROR, EXERCISE_CREATED_SUCCESSFULLY, EXERCISE_DELETED_SUCCESSFULLY, EXERCISE_NOT_FOUND, EXERCISE_UPDATED_SUCCESSFULLY, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SUCCESS, TRUE
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,16 +15,13 @@ logger = logging.getLogger(__name__)
 @login_required(login_url='admin-login')
 def index(request):
     try:
-
         return render(request, "studio/exercises/index.html")
 
     except Exception as ex:
-
         messages.error(request, str(ex))
-
         return render(request, "500.html", {
             ERROR: str(ex),
-            "return_url": "/studio/exercises"
+            RETURN_URL: "/studio/exercises"
         })
 
 
@@ -58,22 +55,27 @@ def create(request):
                 request.FILES
             )
             if form.is_valid():
-                form.save()
-                messages.success(request, "Exercise created successfully")
+                obj = form.save(commit=False)
+                obj.studio = request.user.studio
+                obj.user = request.user
+                obj.save()
+                
+                
+                messages.success(request, EXERCISE_CREATED_SUCCESSFULLY)
                 return redirect("exercises-index")
-            messages.error(request, "Invalid form data")
+            messages.error(request, INVALID_FORM_DATA)
             return render(request, "studio/exercises/create.html", {
-                "form": form
+                FORM: form
             })
         form = ExerciseForm()
         return render(request, "studio/exercises/create.html", {
-            "form": form
+            FORM: form
         })
     except Exception as ex:
         messages.error(request, str(ex))
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/exercises/create"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/exercises/create"
         })
 
 
@@ -86,7 +88,7 @@ def edit(request, uuid):
             uuid=uuid
         ).first()
         if not exercise_obj:
-            messages.error(request, "Exercise not found")
+            messages.error(request, EXERCISE_NOT_FOUND)
             return redirect("exercises-index")
 
         if request.method == "POST":
@@ -96,25 +98,29 @@ def edit(request, uuid):
                 instance=exercise_obj
             )
             if form.is_valid():
-                form.save()
-                messages.success(request, "Exercise updated successfully")
+                obj = form.save(commit=False)
+                obj.studio = request.user.studio
+                obj.user = request.user
+                obj.save()
+                
+                messages.success(request, EXERCISE_UPDATED_SUCCESSFULLY)
                 return redirect("exercises-index")
-            messages.error(request, "Invalid form data")
+            messages.error(request, INVALID_FORM_DATA)
             return render(request, "studio/exercises/edit.html", {
-                "form": form,
+                FORM: form,
                 "exercise_obj": exercise_obj
             })
 
         form = ExerciseForm(instance=exercise_obj)
         return render(request, "studio/exercises/edit.html", {
-            "form": form,
+            FORM: form,
             "exercise_obj": exercise_obj
         })
     except Exception as ex:
         messages.error(request, str(ex))
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/exercises"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/exercises"
         })
 
 
@@ -127,7 +133,7 @@ def view(request, uuid):
             uuid=uuid
         ).first()
         if not exercise_obj:
-            messages.error(request, "Exercise not found")
+            messages.error(request, EXERCISE_NOT_FOUND)
             return redirect("exercises-index")
         return render(request, "studio/exercises/view.html", {
             "exercise_obj": exercise_obj
@@ -135,8 +141,8 @@ def view(request, uuid):
     except Exception as ex:
         messages.error(request, str(ex))
         return render(request, "500.html", {
-            "error": str(ex),
-            "return_url": "/studio/exercises"
+            ERROR: str(ex),
+            RETURN_URL: "/studio/exercises"
         })
 
 
@@ -147,33 +153,29 @@ def delete(request, uuid):
     try:
 
         if request.method == "POST":
-
             exercise_obj = Exercise.objects.filter(
                 uuid=uuid
             ).first()
-
+            
             if not exercise_obj:
-
                 return JsonResponse({
-                    "success": False,
-                    "error": "Exercise not found"
+                    SUCCESS: FALSE,
+                    ERROR: EXERCISE_NOT_FOUND
                 })
 
             exercise_obj.delete()
-
             return JsonResponse({
-                "success": True,
-                "message": "Exercise deleted successfully"
+                SUCCESS: TRUE,
+                MESSAGE: EXERCISE_DELETED_SUCCESSFULLY
             })
 
         return JsonResponse({
-            "success": False,
-            "error": "Invalid request method"
+            SUCCESS: FALSE,
+            ERROR: INVALID_REQUEST_METHOD
         })
 
     except Exception as ex:
-
         return JsonResponse({
-            "success": False,
-            "error": str(ex)
+            SUCCESS: FALSE,
+            ERROR: str(ex)
         })

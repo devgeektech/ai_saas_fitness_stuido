@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from studio.forms.forms import AudioSegmentForm
 from studio.models import AudioSegment
-from utils.constants import ERROR
+from utils.constants import ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SUCCESS, TRUE
 from django_serverside_datatable.views import ServerSideDatatableView
 
 
@@ -64,7 +64,10 @@ def create(request):
 
             if form.is_valid():
 
-                form.save()
+                obj = form.save(commit=False)
+                obj.studio = request.user.studio
+                obj.user = request.user
+                obj.save()
 
                 messages.success(
                     request,
@@ -135,7 +138,10 @@ def edit(request, uuid):
 
             if form.is_valid():
 
-                form.save()
+                obj = form.save(commit=False)
+                obj.studio = request.user.studio
+                obj.user = request.user
+                obj.save()
 
                 messages.success(
                     request,
