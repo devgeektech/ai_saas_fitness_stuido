@@ -58,3 +58,9 @@ AVATAR_VIDEO_CREATED_SUCCESS = "Avatar video created successfully"
 AVATAR_VIDEO_UPDATED_SUCCESS = "Avatar video updated successfully"
 AVATAR_VIDEO_DELETED_SUCCESS = "Avatar video deleted successfully"
 AVATAR_VIDEO_NOT_FOUND = "Avatar video not found"
+
+
+AUDIO_SEGMENT_CREATED_SUCCESS = "Audio segment created successfully"
+AUDIO_SEGMENT_UPDATED_SUCCESS = "Audio segment updated successfully"
+AUDIO_SEGMENT_DELETED_SUCCESS = "Audio segment deleted successfully"
+AUDIO_SEGMENT_NOT_FOUND = "Audio segment not found"
