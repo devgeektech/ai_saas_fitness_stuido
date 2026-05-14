@@ -5,7 +5,7 @@ from django.contrib import messages
 from django_serverside_datatable.views import ServerSideDatatableView
 from studio.forms.forms import ClassSegmentForm
 from studio.models import ClassSegment
-from utils.constants import CLASS_SEGMENT_CREATED_SUCCESSFULLY, CLASS_SEGMENT_UPDATED_SUCCESSFULLY, ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SEGMENT_NOT_FOUND, SUCCESS, TRUE
+from utils.constants import CLASS_SEGMENT_CREATED_SUCCESSFULLY, CLASS_SEGMENT_DELETED_SUCCESSFULLY, CLASS_SEGMENT_UPDATED_SUCCESSFULLY, ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SEGMENT_NOT_FOUND, SOMETHING_WENT_WRONG, SUCCESS, TRUE
 
 
 # INDEX
@@ -66,20 +66,11 @@ def create(request):
                 )
 
         form = ClassSegmentForm()
-        return render(request, "studio/class-segments/create.html",
-            {
-                FORM: form
-            }
-        )
+        return render(request, "studio/class-segments/create.html", {FORM: form})
 
     except Exception as ex:
         messages.error(request, f"Error: {str(ex)}")
-        return render( request, "500.html",
-            {
-                ERROR: str(ex),
-                RETURN_URL: "/studio/class-segments/create"
-            }
-        )
+        return render( request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/class-segments/create"})
 
 
 # EDIT
@@ -95,9 +86,7 @@ def edit(request, uuid):
             return redirect("class-segments-index")
 
         if request.method == "POST":
-
             form = ClassSegmentForm(request.POST, instance=segment_obj)
-
             if form.is_valid():
                 obj = form.save(commit=False)
                 obj.studio = request.user.studio
@@ -108,29 +97,14 @@ def edit(request, uuid):
                 return redirect("class-segments-index")
 
             messages.error(request, INVALID_FORM_DATA)
-            return render(request, "studio/class-segments/edit.html",
-                {
-                    FORM: form,
-                    "segment_obj": segment_obj
-                }
-            )
+            return render(request, "studio/class-segments/edit.html", {FORM: form, "segment_obj": segment_obj})
 
         form = ClassSegmentForm(instance=segment_obj)
-        return render(request, "studio/class-segments/edit.html",
-            {
-                FORM: form,
-                "segment_obj": segment_obj
-            }
-        )
+        return render(request, "studio/class-segments/edit.html", {FORM: form, "segment_obj": segment_obj})
 
     except Exception as ex:
-        messages.error(request, "Something went wrong")
-        return render(request, "500.html",
-            {
-                "error": str(ex),
-                "return_url": "/studio/class-segments"
-            }
-        )
+        messages.error(request, SOMETHING_WENT_WRONG)
+        return render(request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/class-segments"})
 
 
 # VIEW
@@ -144,27 +118,15 @@ def view(request, uuid):
         ).first()
 
         if not segment_obj:
-            messages.error(request, "Segment not found.")
+            messages.error(request, SEGMENT_NOT_FOUND)
             return redirect("class-segments-index")
 
         return render(
-            request,
-            "studio/class-segments/view.html",
-            {
-                "segment_obj": segment_obj
-            }
-        )
+            request, "studio/class-segments/view.html", {"segment_obj": segment_obj})
 
     except Exception as ex:
-        messages.error(request, "Something went wrong")
-        return render(
-            request,
-            "500.html",
-            {
-                "error": str(ex),
-                "return_url": "/studio/class-segments"
-            }
-        )
+        messages.error(request, SOMETHING_WENT_WRONG)
+        return render(request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/class-segments"})
 
 
 # DELETE
@@ -174,29 +136,15 @@ def delete(request, uuid):
     try:
 
         if request.method == "POST":
-            segment_obj = ClassSegment.objects.filter(
-                uuid=uuid
-            ).first()
+            segment_obj = ClassSegment.objects.filter(uuid=uuid).first()
 
             if not segment_obj:
-                return JsonResponse({
-                    "success": False,
-                    "error": "Segment not found"
-                })
+                return JsonResponse({SUCCESS: FALSE, ERROR: SEGMENT_NOT_FOUND})
 
             segment_obj.delete()
-            return JsonResponse({
-                "success": True,
-                "message": "Class segment deleted successfully"
-            })
+            return JsonResponse({SUCCESS: TRUE, MESSAGE: CLASS_SEGMENT_DELETED_SUCCESSFULLY})
 
-        return JsonResponse({
-            "success": False,
-            "error": "Invalid request method"
-        })
+        return JsonResponse({SUCCESS: FALSE, ERROR: INVALID_REQUEST_METHOD})
 
     except Exception as ex:
-        return JsonResponse({
-            "success": False,
-            "error": str(ex)
-        })
+        return JsonResponse({SUCCESS: FALSE, ERROR: str(ex)})

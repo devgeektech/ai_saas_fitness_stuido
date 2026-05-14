@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from studio.forms.forms import AvatarVideoForm
 from studio.models import AvatarVideo
-from utils.constants import ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SUCCESS, TRUE
+from utils.constants import AVATAR_VIDEO_CREATED_SUCCESS, AVATAR_VIDEO_DELETED_SUCCESS, AVATAR_VIDEO_NOT_FOUND, AVATAR_VIDEO_UPDATED_SUCCESS, ERROR, FALSE, FORM, INVALID_FORM_DATA, INVALID_REQUEST_METHOD, MESSAGE, RETURN_URL, SOMETHING_WENT_WRONG, SUCCESS, TRUE
 from django_serverside_datatable.views import ServerSideDatatableView
 
 
@@ -13,18 +13,11 @@ def index(request):
 
     try:
         context = {}
-        return render(
-            request,
-            "studio/avatar-videos/index.html",
-            context
-        )
+        return render(request, "studio/avatar-videos/index.html", context)
 
     except Exception as ex:
         messages.error(request, ex)
-        context = {
-            ERROR: str(ex),
-            "return_url": "/studio/avatar-videos"
-        }
+        context = {ERROR: str(ex),RETURN_URL: "/studio/avatar-videos"}
         return render(request, "500.html", context)
 
 
@@ -52,47 +45,24 @@ def create(request):
         if request.method == "POST":
             form = AvatarVideoForm(request.POST)
             if form.is_valid():
-                obj = form.save(commit=False)
+                obj = form.save(commit=FALSE)
                 obj.studio = request.user.studio
                 obj.user = request.user
                 obj.save()
 
-                messages.success(
-                    request,
-                    "Avatar video created successfully"
-                )
+                messages.success(request, AVATAR_VIDEO_CREATED_SUCCESS)
                 return redirect("avatar-videos-index")
 
             else:
-
-                messages.error(request, "Invalid form data")
-                return render(
-                    request,
-                    "studio/avatar-videos/create.html",
-                    {
-                        "form": form
-                    }
-                )
+                messages.error(request, INVALID_FORM_DATA)
+                return render(request, "studio/avatar-videos/create.html", {"form": form})
 
         form = AvatarVideoForm()
-        return render(
-            request,
-            "studio/avatar-videos/create.html",
-            {
-                "form": form
-            }
-        )
+        return render(request, "studio/avatar-videos/create.html", {"form": form})
 
     except Exception as ex:
         messages.error(request, f"Error: {str(ex)}")
-        return render(
-            request,
-            "500.html",
-            {
-                "error": str(ex),
-                "return_url": "/studio/avatar-videos/create"
-            }
-        )
+        return render(request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/avatar-videos/create"})
 
 
 
@@ -101,12 +71,10 @@ def edit(request, uuid):
 
     try:
 
-        avatar_obj = AvatarVideo.objects.filter(
-            uuid=uuid
-        ).first()
+        avatar_obj = AvatarVideo.objects.filter(uuid=uuid).first()
 
         if not avatar_obj:
-            messages.error(request, "Avatar video not found.")
+            messages.error(request, AVATAR_VIDEO_NOT_FOUND)
             return redirect("avatar-videos-index")
 
 
@@ -117,47 +85,23 @@ def edit(request, uuid):
             )
 
             if form.is_valid():
-                obj = form.save(commit=False)
+                obj = form.save(commit=FALSE)
                 obj.studio = request.user.studio
                 obj.user = request.user
                 obj.save()
 
-                messages.success(
-                    request,
-                    "Avatar video updated successfully"
-                )
+                messages.success(request, AVATAR_VIDEO_UPDATED_SUCCESS)
                 return redirect("avatar-videos-index")
 
-            messages.error(request, "Invalid form data")
-            return render(
-                request,
-                "studio/avatar-videos/edit.html",
-                {
-                    "form": form,
-                    "avatar_obj": avatar_obj
-                }
-            )
+            messages.error(request, INVALID_FORM_DATA)
+            return render(request, "studio/avatar-videos/edit.html", {FORM: form,"avatar_obj": avatar_obj})
 
         form = AvatarVideoForm(instance=avatar_obj)
-        return render(
-            request,
-            "studio/avatar-videos/edit.html",
-            {
-                "form": form,
-                "avatar_obj": avatar_obj
-            }
-        )
+        return render(request, "studio/avatar-videos/edit.html", {FORM: form, "avatar_obj": avatar_obj})
 
     except Exception as ex:
-        messages.error(request, "Something went wrong")
-        return render(
-            request,
-            "500.html",
-            {
-                "error": str(ex),
-                "return_url": "/studio/avatar-videos/list"
-            }
-        )
+        messages.error(request, SOMETHING_WENT_WRONG)
+        return render(request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/avatar-videos/list"})
 
 
 
@@ -170,27 +114,15 @@ def view(request, uuid):
         ).first()
 
         if not avatar_obj:
-            messages.error(request, "Avatar video not found.")
+            messages.error(request, AVATAR_VIDEO_NOT_FOUND)
             return redirect("avatar-videos-index")
 
         return render(
-            request,
-            "studio/avatar-videos/view.html",
-            {
-                "avatar_obj": avatar_obj
-            }
-        )
+            request, "studio/avatar-videos/view.html", {"avatar_obj": avatar_obj})
 
     except Exception as ex:
         messages.error(request, "Something went wrong")
-        return render(
-            request,
-            "500.html",
-            {
-                "error": str(ex),
-                "return_url": "/studio/avatar-videos/list"
-            }
-        )
+        return render(request, "500.html", {ERROR: str(ex), RETURN_URL: "/studio/avatar-videos/list"})
 
 
 
@@ -205,25 +137,13 @@ def delete(request, uuid):
             ).first()
 
             if not avatar_obj:
-                return JsonResponse({
-                    "success": False,
-                    "error": "Avatar video not found"
-                })
+                return JsonResponse({SUCCESS: FALSE, ERROR: AVATAR_VIDEO_NOT_FOUND})
 
             avatar_obj.delete()
-            return JsonResponse({
-                "success": True,
-                "message": "Avatar video deleted successfully"
-            })
+            return JsonResponse({SUCCESS: TRUE, MESSAGE: AVATAR_VIDEO_DELETED_SUCCESS})
 
-        return JsonResponse({
-            "success": False,
-            "error": "Invalid request method"
-        })
+        return JsonResponse({SUCCESS: FALSE, ERROR: INVALID_REQUEST_METHOD})
 
     except Exception as ex:
 
-        return JsonResponse({
-            "success": False,
-            "error": str(ex)
-        })
+        return JsonResponse({SUCCESS: FALSE, ERROR: str(ex)})

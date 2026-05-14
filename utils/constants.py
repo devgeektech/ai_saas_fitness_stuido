@@ -52,3 +52,9 @@ SEGMENT_NOT_FOUND = "Segment not found."
 CLASS_SEGMENT_CREATED_SUCCESSFULLY = "Class segment created successfully."
 CLASS_SEGMENT_UPDATED_SUCCESSFULLY = "Class segment updated successfully."
 CLASS_SEGMENT_DELETED_SUCCESSFULLY = "Class segment deleted successfully."
+
+
+AVATAR_VIDEO_CREATED_SUCCESS = "Avatar video created successfully"
+AVATAR_VIDEO_UPDATED_SUCCESS = "Avatar video updated successfully"
+AVATAR_VIDEO_DELETED_SUCCESS = "Avatar video deleted successfully"
+AVATAR_VIDEO_NOT_FOUND = "Avatar video not found"
