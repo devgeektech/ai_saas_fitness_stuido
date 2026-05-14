@@ -1,0 +1,130 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Studio Users</a></li>
+                        <li class="breadcrumb-item active">View User</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Studio User Details</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAILS CARD -->
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card mb-4">
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+                        {% if studio_user.first_name or studio_user.last_name %}
+                            {{ studio_user.first_name|default_if_none:"" }} {{ studio_user.last_name|default_if_none:"" }}
+                        {% else %}
+                            {{ studio_user.email }}
+                        {% endif %}
+                    </h4>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ studio_user.email|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Username</th>
+                            <td>{{ studio_user.username|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>First Name</th>
+                            <td>{{ studio_user.first_name|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>
+                            <td>{{ studio_user.last_name|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Role</th>
+                            <td>{{ studio_user.role|title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{% if studio_user.is_active %}Active{% else %}Inactive{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <th>Profile Image</th>
+                            <td>
+                                {% if studio_user.image %}
+                                    <img src="{{ studio_user.image.url }}" alt="Profile Image" style="max-width: 120px; max-height: 120px;" />
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mb-3">Studio Details</h4>
+                    {% if studio %}
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>User</th>
+                            <td>{% if studio.user %}{{ studio.user.email }}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ studio.name|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Logo</th>
+                            <td>
+                                {% if studio.logo %}
+                                    <img src="{{ studio.logo.url }}" alt="Studio Logo" style="max-width: 150px; max-height: 150px;" />
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Brand Color</th>
+                            <td>
+                                {% if studio.brand_color %}
+                                    <span class="badge bg-primary" style="background-color: {{ studio.brand_color }};">{{ studio.brand_color }}</span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td>{{ studio.created_at }}</td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td>{{ studio.updated_at }}</td>
+                        </tr>
+                    </table>
+                    {% else %}
+                    <div class="text-muted">No studio assigned to this user.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <a href="{% url 'studios-index' %}" class="btn btn-secondary">Back to list</a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

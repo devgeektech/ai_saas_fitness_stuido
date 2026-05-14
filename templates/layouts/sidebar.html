@@ -150,6 +150,13 @@
                   <span> Dashboard </span>
                </a>
             </li>
+
+            <li class="side-nav-item {% if '/admin/studios' in request.path %}menuitem-active{% endif %}">
+               <a href="{% url 'studios-index' %}" class="side-nav-link">
+                  <i class="uil-building"></i>
+                  <span> Studio Users </span>
+               </a>
+            </li>
          
          {% elif user.is_active and user.role == 'studio_admin' %}
        

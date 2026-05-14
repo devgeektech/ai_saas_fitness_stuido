@@ -1,0 +1,62 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'assets/theme/css/plugins/datatables/bootstrap5.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/theme/css/plugins/datatables/responsive.bootstrap5.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Studio Users List</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Studio Users List</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table dt-responsive nowrap w-100" id="superadmin-studios-list">
+                        <thead class="table-light">
+                            <tr>
+                                <th></th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Studio Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'assets/theme/js/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/plugins/datatables/bootstrap5.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/plugins/datatables/responsive.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/plugins/datatables/responsive.bootstrap5.min.js' %}"></script>
+<script>
+    const studios_list = "{% url 'studios-list' %}";
+    const studios_toggle_status_url = "{% url 'studios-toggle-status' uuid='00000000-0000-0000-0000-000000000000' %}";
+</script>
+<script src="{% static 'assets/admin/js/superadmin/studios/index.js' %}"></script>
+{% endblock js %}
