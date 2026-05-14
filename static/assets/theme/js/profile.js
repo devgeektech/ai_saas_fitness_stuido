@@ -5,20 +5,15 @@ $(document).ready(function(){
             rules: {
                 password: {required: true,minlength: 6},
                 confirm_password: {
-                    minlength: 6,
                     required: true,
+                    minlength: 6,
                     equalTo: "#password"
                 }
             },
-            confirm_password: {
-                required: true,
-                minlength: 6,
-                equalTo: "#password"
+            messages: {
+                confirm_password: "Confirm password must match new password."
             }
-        },
-        messages: {
-            confirm_password: "Confirm password must match new password."
-        }
+        });
     });
 
     // ✅ PROFILE FORM VALIDATION
