@@ -46,31 +46,36 @@ def studio_admin_profile(request):
             })
         if request.method == "POST" and request.POST.get('type') == "update_info":
             try:
-                image = request.FILES.get("image")
-                phone = request.POST.get("phone")  
+                # image = request.FILES.get("image")
+                # phone = request.POST.get("phone")  
+                first_name = request.POST.get("first_name").strip()
+                last_name = request.POST.get("last_name").strip()
                 user = request.user
 
                 # Change Profile Picture
-                if image is not None:                   
-                    old_image = user.image
-                    original_file_name = image.name
-                    file_extension = original_file_name.split(".")[-1]
-                    unique_name = generate_random_string(6) 
-                    new_image_name = f"{unique_name}.{file_extension}"
-                    # Save the avatar with the new name
-                    fs = FileSystemStorage(location="media/studios/user/")
-                    new_image = fs.save(new_image_name, image)
-                    user.image = f"studios/user/{new_image_name}"
+                # if image is not None:                   
+                #     old_image = user.image
+                #     original_file_name = image.name
+                #     file_extension = original_file_name.split(".")[-1]
+                #     unique_name = generate_random_string(6) 
+                #     new_image_name = f"{unique_name}.{file_extension}"
+                #     # Save the avatar with the new name
+                #     fs = FileSystemStorage(location="media/studios/user/")
+                #     new_image = fs.save(new_image_name, image)
+                #     user.image = f"studios/user/{new_image_name}"
 
-                    try:
-                        # Delete the old image
-                        os.remove(old_image.path)
-                    except Exception as ex:
-                        pass
+                #     try:
+                #         # Delete the old image
+                #         os.remove(old_image.path)
+                #     except Exception as ex:
+                #         pass
+                
+                user.first_name = first_name
+                user.last_name = last_name
                 
                 user.save()
                 messages.success(request, PROFILE_UPDATED_SUCCESS)
-                return redirect("profile")
+                return redirect("studio-admin-profile")
 
             except Exception as ex:
                 messages.error(request, str(ex))        
@@ -88,11 +93,11 @@ def studio_admin_profile(request):
                         user.save()
                         login(request, user)
                         messages.success(request, PROFILE_UPDATED_SUCCESS)
-                        return redirect("profile")
+                        return redirect("studio-admin-profile")
                     messages.error(request, INVALID_PASSWORD)
-                    return redirect("profile")
+                    return redirect("studio-admin-profile")
                 messages.error(request, INVALID_OLD_PASSWORD)
-                return redirect("profile")
+                return redirect("studio-admin-profile")
             except Exception as ex:
                 messages.error(request, str(ex))        
                 context = {ERROR:str(ex),"return_url":"/studio/admin/profile"}

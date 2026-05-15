@@ -75,6 +75,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row"> 
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="firstname" class="form-label">First name</label>
+                                                <input type="text" class="form-control" name="first_name" value="{{user.first_name|default:'' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row"> 
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lastname" class="form-label">Last name</label>
+                                                <input type="text" name="last_name" class="form-control" value="{{user.last_name|default:'' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="justify-content-end row">
+                                            <div class="col-10">
+                                                <button type="submit" class="btn btn-primary" id="updatePasswordBtn">Update</button>
+                                            </div>
+                                    </div>      
                                 </form>                                    
                             </div> 
                             <div class="tab-pane" id="update_password" role="tabpanel">
